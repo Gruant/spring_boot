@@ -1,15 +1,26 @@
 package ru.antongrutsin.spring_boot.model;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "product")
 public class Product {
-    private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Long id;
+
+    @Column(name = "title", length = 64)
     private String title;
+
+    @Column(name = "cost")
     private double cost;
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -28,4 +39,5 @@ public class Product {
     public void setCost(double cost) {
         this.cost = cost;
     }
+
 }

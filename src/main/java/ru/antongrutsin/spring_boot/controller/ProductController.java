@@ -7,34 +7,40 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import ru.antongrutsin.spring_boot.model.Product;
-import ru.antongrutsin.spring_boot.repository.ProductRepository;
+import ru.antongrutsin.spring_boot.repository.ProductDAO;
 
 import java.util.List;
 
 @Controller
 @RequestMapping("/products")
 public class ProductController {
-    private ProductRepository productRepository;
+    private ProductDAO productDAO;
 
     @Autowired
-    public void setProductRepository (ProductRepository productRepository) {
-        this.productRepository = productRepository;
+    public ProductController(ProductDAO productDAO) {
+        this.productDAO = productDAO;
     }
 
     @RequestMapping(method = RequestMethod.GET)
     public String showAllProducts(Model uiModel){
-        List<Product> products = productRepository.getAll();
+        List<Product> products = productDAO.findAll();
         uiModel.addAttribute("products", products);
         return "products";
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public String showById(Model uiModel, @PathVariable(value = "id") int id){
-        Product product = productRepository.getById(id);
+    public String showById(Model uiModel, @PathVariable(value = "id") Long id){
+        Product product = productDAO.findById(id);
         uiModel.addAttribute("id", product.getId());
         uiModel.addAttribute("title", product.getTitle());
         uiModel.addAttribute("cost", product.getCost());
         return "product";
+    }
+
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
+    public String deleteById(Model uiModel, @PathVariable(value = "id") Long id){
+        productDAO.deleteById(id);
+        return "redirect:/products";
     }
 
     @RequestMapping(value = "/form", method = RequestMethod.GET)
@@ -46,7 +52,7 @@ public class ProductController {
 
     @RequestMapping(value = "/form", method = RequestMethod.POST)
     public String create(Product product) {
-        productRepository.save(product);
+        productDAO.saveOrUpdate(product);
         return "redirect:/products";
     }
 
