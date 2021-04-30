@@ -1,6 +1,10 @@
 package ru.antongrutsin.spring_boot.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -23,18 +27,30 @@ public class ProductController {
     @GetMapping
     public String showAllProducts(Model model,
                                   @RequestParam(value = "minPrice", required = false) String min,
-                                  @RequestParam(value = "maxPrice", required = false) String max){
+                                  @RequestParam(value = "maxPrice", required = false) String max,
+                                  @RequestParam(defaultValue = "10") int size,
+                                  @RequestParam(defaultValue = "0") int page){
         int minimal = 0;
         int maximum = Integer.MAX_VALUE;
 
         if(min != null){ minimal = Integer.parseInt(min); }
         if(max != null){ maximum = Integer.parseInt(max); }
-        List<Product> products = productRepository.findProductByCostGreaterThanEqualAndCostLessThanEqual(minimal, maximum);
+
+        Pageable paging = PageRequest.of(page, size);
+        List<Product> products = productRepository.findProductByCostGreaterThanEqualAndCostLessThanEqual(minimal, maximum, paging);
+        Long count = productRepository.count();
+
+        if(count/size != 0){
+            model.addAttribute("pageCount", count/size + 1);
+        } else {
+            model.addAttribute("pageCount", count/size);
+        }
         model.addAttribute("products", products);
+
         return "products";
     }
 
-    @PostMapping
+    @PostMapping(value = "/create")
     @ResponseBody
     public void createProduct(@RequestParam(name = "name") String name,
                               @RequestParam(name = "cost") int cost){
@@ -55,10 +71,12 @@ public class ProductController {
         return "product";
     }
 
+
+
     @GetMapping(value = "/delete/{id}")
-    @ResponseBody
-    public void delete (@PathVariable(value = "id") int id){
+    public String delete (@PathVariable(value = "id") int id){
         productRepository.deleteById(id);
+        return "redirect:/products";
     }
 
 
