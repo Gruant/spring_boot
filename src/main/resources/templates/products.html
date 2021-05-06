@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Все продукты</title>
+</head>
+<body>
+<table border="1" style="width:300px">
+  <tr>
+    <td align="center">ID</td>
+    <td align="center">NAME</td>
+    <td align="center">COST</td>
+    <td align="center">ACTION</td>
+  </tr>
+  <tr th:each="product: ${products}">
+    <td th:text="${product.id}"></td>
+    <td th:text="${product.name}"></td>
+    <td th:text="${product.cost}"></td>
+    <td align="center">
+        <button type="submit" ><a th:href="@{/products/delete/{id}(id=${product.id})}">Delete</a></button>
+    </td>
+  </tr>
+  </tbody>
+  <br>
+  <table>
+    <tr>
+      <td th:each="count: ${#numbers.sequence(1, pageCount)}">
+        <a th:href='@{/products?page={count}(count=${count}-1)}'>
+          <button th:text="${count}" type="submit">
+          </button>
+        </a>
+      </td>
+    </tr>
+  </table>
+</table>
+</body>
+</html>
