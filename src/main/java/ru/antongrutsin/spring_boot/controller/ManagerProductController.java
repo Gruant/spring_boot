@@ -12,11 +12,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/products")
-public class ProductController {
+@RequestMapping("/editproducts")
+public class ManagerProductController {
     private final ProductRepository productRepository;
 
-    public ProductController(ProductRepository productRepository) {
+    public ManagerProductController (ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
 
@@ -43,7 +43,7 @@ public class ProductController {
         }
         model.addAttribute("products", products);
 
-        return "products";
+        return "manager-products";
     }
 
     @PostMapping(value = "/create")
@@ -64,13 +64,13 @@ public class ProductController {
         } else {
             model.addAttribute("product", new Product());
         }
-        return "product";
+        return "manager-products";
     }
 
     @GetMapping(value = "/delete/{id}")
     public String delete (@PathVariable(value = "id") int id){
         productRepository.deleteById(id);
-        return "redirect:/editproducts";
+        return "redirect:manager-products";
     }
 
     @GetMapping("/form/{id}")
@@ -91,7 +91,7 @@ public class ProductController {
     @PostMapping("/form")
     public String create(Product product) {
         productRepository.save(product);
-        return "redirect:/editproducts";
+        return "redirect:/manager-products";
     }
 
 }

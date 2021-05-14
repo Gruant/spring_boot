@@ -10,14 +10,27 @@
     <td align="center">ID</td>
     <td align="center">NAME</td>
     <td align="center">COST</td>
+    <td align="center">DELETE</td>
+    <td align="center">PATCH</td>
   </tr>
   <tr th:each="product: ${products}">
     <td th:text="${product.id}"></td>
     <td th:text="${product.name}"></td>
     <td th:text="${product.cost}"></td>
+    <td align="center">
+      <button type="submit" ><a th:href="@{/products/delete/{id}(id=${product.id})}">Delete</a></button>
+    </td>
+    <td align="center">
+      <button type="submit" ><a th:href="@{/products/form/{id}(id=${product.id})}">Patch</a></button>
+    </td>
   </tr>
   </tbody>
   <br>
+  <table>
+    <td align="center">
+      <button type="submit" ><a th:href="@{/products/form}">Add</a></button>
+    </td>
+  </table>
   <table>
     <tr>
       <td th:each="count: ${#numbers.sequence(1, pageCount)}">
