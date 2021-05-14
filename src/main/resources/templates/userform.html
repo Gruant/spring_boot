@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Add new product</title>
+</head>
+
+<body>
+<form th:action="@{/admin/userform}" th:object="${user}" method="post">
+  Name: <input type="text" th:field="*{username}"/>
+  <br>
+  Password: <input type="text" th:field="*{password}"/>
+  <br>
+  <button type="submit">Save</button>
+</form>
+</body>
+</html>
