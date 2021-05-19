@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Все продукты</title>
+</head>
+<body>
+<table border="1" style="width:300px">
+    <tr>
+        <td align="center">ID</td>
+        <td align="center">NAME</td>
+        <td align="center">ROLES</td>
+    </tr>
+    <tr th:each="user: ${allUsers}">
+        <td th:text="${user.id}"></td>
+        <td th:text="${user.username}"></td>
+        <td th:text="${user.roles}"></td>
+    </tr>
+</table>
+<table>
+    <td align="center">
+    <button type="submit" ><a th:href="@{/admin/userform}">Add user</a></button>
+    </td>
+</table>
+</body>
+</html>
